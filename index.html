@@ -14,7 +14,8 @@
 
 <script>
 var map = new Map("mainplot")
-var sun = new Sun(new Date(Date.now()))
+var now = new Date(Date.now())
+var sun = new Sun(now)
 const mapRenderedEvent = new Event('mapRendered')
 const landData = new Request("ne_110m_land.json")
 const lakeData = new Request("ne_110m_lakes.json")
@@ -62,6 +63,10 @@ document.addEventListener("mapRendered", (e) => {
 	updateSun()
 	setInterval(updateSun, 60000)
 })
+
+var minutes = now.getTimezoneOffset()
+var roughDegrees = minutes * 0.25
+map.setRotate(-roughDegrees)
 
 navigator.geolocation.getCurrentPosition((position) => {
 	let longitudeR = VectorUtils.degreeToRadian(position.coords.longitude)
