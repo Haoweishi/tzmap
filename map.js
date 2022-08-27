@@ -1,6 +1,7 @@
 class Map {
-	constructor (elementId) {
-		this.svgElement = document.getElementById(elementId)
+	constructor (elementId, dom, window) {
+	    this.dom = dom
+		this.svgElement = this.dom.getElementById(elementId)
 		this.documentSize = Math.min(window.innerWidth, window.innerHeight) * 0.9
 		this.svgElement.setAttribute("width", this.documentSize)
 		this.svgElement.setAttribute("height", this.documentSize)
@@ -9,7 +10,7 @@ class Map {
 		this.cy = this.documentSize / 2
 		this.r = (this.documentSize / 2) * 0.9
 		
-		let element = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+		let element = this.dom.createElementNS('http://www.w3.org/2000/svg', 'circle');
 		element.setAttribute("cx" , this.cy)
 		element.setAttribute("cy" , this.cx)
 		element.setAttribute("fill", "blue")
@@ -25,7 +26,7 @@ class Map {
 	}
 	
 	geoCoordinateToXY(longitude, latitude) {
-		let disk = document.getElementById("disk")
+		let disk = this.dom.getElementById("disk")
 		let radius = disk.getAttribute("r")
 		let x = radius * Math.cos(longitude - Math.PI / 2) * Math.sin(Math.PI / 2 - latitude)
 		let y = radius * Math.sin(longitude + Math.PI / 2) * Math.sin(Math.PI / 2 - latitude)
@@ -34,7 +35,7 @@ class Map {
 	}
 	
 	setMarker(longitude, latitude, color, id) {
-		let existing = document.getElementById(id)
+		let existing = this.dom.getElementById(id)
 		let xy = this.geoCoordinateToXY(longitude, latitude)
 		let plotXY = this.xyToCanvas(xy[0], xy[1])
 		if (existing != null) {
@@ -42,7 +43,7 @@ class Map {
 			existing.setAttribute("cy" , plotXY[1])
 			return
 		}
-		let element = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
+		let element = this.dom.createElementNS('http://www.w3.org/2000/svg', 'circle')
 		element.setAttribute("cx" , plotXY[0])
 		element.setAttribute("cy" , plotXY[1])
 		element.setAttribute("fill", color)
@@ -52,7 +53,7 @@ class Map {
 	}
 	
 	plotGeometry(coordList, color = "#FFFFFF", opacity = "100%") {
-		let geometry = document.createElementNS("http://www.w3.org/2000/svg", "polygon")
+		let geometry = this.dom.createElementNS("http://www.w3.org/2000/svg", "polygon")
 		let instructions = ""
 		let plotted = 0
 		let isVisible = false
@@ -79,7 +80,7 @@ class Map {
 	}
 	
 	plotLine(coordList, color = "#FFFFFF", opacity = "100%") {
-		let geometry = document.createElementNS("http://www.w3.org/2000/svg", "polyline")
+		let geometry = this.dom.createElementNS("http://www.w3.org/2000/svg", "polyline")
 		let instructions = ""
 		let plotted = 0
 		let isVisible = false
@@ -135,4 +136,8 @@ class Map {
 		let template = 'rotate(' + degrees + ')'
 		this.svgElement.setAttribute("transform", template)
 	}
+}
+
+if (typeof module !== "undefined") {
+    module.exports = Map
 }

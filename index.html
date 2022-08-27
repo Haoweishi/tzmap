@@ -13,7 +13,7 @@
 </svg>
 
 <script>
-var map = new Map("mainplot")
+var map = new Map("mainplot", document, window)
 var now = new Date(Date.now())
 var sun = new Sun(now)
 const mapRenderedEvent = new Event('mapRendered')

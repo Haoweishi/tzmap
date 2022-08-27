@@ -1,3 +1,7 @@
+if (typeof require !== "undefined") {
+    Vector3D = require("./vector.js")
+}
+
 class VectorUtils {
 	
 	static degreeToRadian(degree) {
@@ -36,4 +40,8 @@ class VectorUtils {
 		let raw = new Vector3D(newX, newY, newZ)
 		return raw
 	}
+}
+
+if (typeof module !== "undefined") {
+    module.exports = VectorUtils
 }

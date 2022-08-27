@@ -1,3 +1,7 @@
+if (typeof require !== "undefined") {
+    VectorUtils = require("./vectorutils.js")
+}
+
 class Sun {
 	constructor(date) {
 		this.date = date
@@ -51,4 +55,8 @@ class Shadow {
 		
 		return coordinates
 	}
+}
+
+if (typeof module !== "undefined") {
+    module.exports = {Sun, Shadow}
 }
