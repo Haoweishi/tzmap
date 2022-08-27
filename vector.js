@@ -41,3 +41,7 @@ class Vector3D {
 		return result
 	}
 }
+
+if (typeof module !== "undefined") {
+    module.exports = Vector3D
+}
