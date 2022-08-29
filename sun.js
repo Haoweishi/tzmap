@@ -55,6 +55,33 @@ class Shadow {
 		
 		return coordinates
 	}
+
+	static getDayArcLength(sun, map, query_latitude) {
+	    let noon_longitude = sun.longitude
+	    let noon_latitude = sun.latitude
+	    let xyz = map.geoCoordinateToXY(noon_latitude, noon_latitude)
+		let sunVector = new Vector3D(xyz[0], xyz[1], xyz[2])
+		let v1 = VectorUtils.findOrthogonalVector(sunVector)
+		v1.norm()
+		let v2 = sunVector.cross(v1)
+		v2.norm()
+		let coordinates = []
+		let r = map.r
+
+        let total = 0
+        let daylight = 0
+		for (var i = -Math.PI; i < Math.PI; i += Math.PI / 128) {
+		    let newXYZ = map.geoCoordinateToXY(i, query_latitude)
+            let positionVector = new Vector3D(newXYZ[0], newXYZ[1], newXYZ[2])
+            let solarAngle = Math.acos(sunVector.dot(positionVector) / (sunVector.magnitude() * positionVector.magnitude()))
+            total += 1
+            if (Math.abs(solarAngle) <= Math.PI / 2) {
+                daylight += 1
+            }
+		}
+		let arcPercentage = daylight / total
+		return arcPercentage
+	}
 }
 
 if (typeof module !== "undefined") {
