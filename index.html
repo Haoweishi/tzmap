@@ -13,8 +13,10 @@
 </svg>
 
 <div>
-    <h2>Today's Day Length</h2>
-    <p><span id = "dayLengthHour">--</span> Hours, <span id = "dayLengthMinute">--</span> Minutes</p>
+    <h2>Sunrise</h2>
+    <p><span id = "sunriseHour">--</span>:<span id = "sunriseMinute">--</span></p>
+    <h2>Sunset</h2>
+    <p><span id = "sunsetHour">--</span>:<span id = "sunsetMinute">--</span></p>
 </div>
 
 
@@ -79,11 +81,23 @@ navigator.geolocation.getCurrentPosition((position) => {
 	let latitudeR = VectorUtils.degreeToRadian(position.coords.latitude)
 	map.setMarker(longitudeR, latitudeR, "#FF0000", "user")
 	map.setRotate(position.coords.longitude)
-	let dayArcLength = Shadow.getDayArcLength(sun, map, VectorUtils.degreeToRadian(39))
+	let dayArcLength = Shadow.getDayArcLength(sun, map, latitudeR)
 	let dayHours = 24 * dayArcLength
 	let dayMinutes = (dayHours - Math.floor(dayHours)) * 60
-	document.getElementById("dayLengthHour").innerText = Math.floor(dayHours)
-	document.getElementById("dayLengthMinute").innerText = Math.floor(dayMinutes)
+
+    let noonOffset = Shadow.getSolarNoonOffset(longitudeR)
+	var noonDate = new Date(Date.now())
+	noonDate.setUTCHours(0)
+	noonDate.setUTCMinutes(0)
+	var localNoonDate = new Date(noonDate.getTime() + noonOffset*1000)
+
+    let dayMilliSeconds = dayHours * 60 * 60 * 1000
+    let sunriseDate = new Date(localNoonDate.getTime() - dayMilliSeconds / 2)
+    let sunsetDate = new Date(localNoonDate.getTime() + dayMilliSeconds / 2)
+    document.getElementById("sunriseHour").innerText = sunriseDate.getHours()
+	document.getElementById("sunriseMinute").innerText = sunriseDate.getMinutes()
+	document.getElementById("sunsetHour").innerText = sunsetDate.getHours()
+	document.getElementById("sunsetMinute").innerText = sunsetDate.getMinutes()
 });
 
 </script>

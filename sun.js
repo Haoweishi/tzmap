@@ -82,6 +82,11 @@ class Shadow {
 		let arcPercentage = daylight / total
 		return arcPercentage
 	}
+
+	static getSolarNoonOffset(query_longitude) {
+	    let longitude = -VectorUtils.radianToDegree(query_longitude + Math.PI)
+	    return (longitude / 15) * 60 * 60
+	}
 }
 
 if (typeof module !== "undefined") {
