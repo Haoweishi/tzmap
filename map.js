@@ -22,6 +22,8 @@ class Map {
 		element.setAttribute("id", "disk")
 		element.setAttribute("r", this.r)
 		this.svgElement.appendChild(element);
+
+		this.rotation = 0
 	}
 	
 	xyToCanvas(x, y) {
@@ -138,6 +140,7 @@ class Map {
 	}
 	
 	setRotate(degrees) {
+	    this.rotation = degrees
 		let template = 'rotate(' + degrees + ')'
 		this.svgElement.setAttribute("transform", template)
 	}

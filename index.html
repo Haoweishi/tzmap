@@ -81,7 +81,8 @@ function updateSun() {
 function updateDial() {
     let now = new Date(Date.now())
     let degrees = now.getHours() * 15 + now.getMinutes() * 0.25
-    degrees = - degrees
+    console.log(degrees, map.rotation)
+    degrees = degrees - map.rotation
     map.hourDial.setAttribute("transform", "rotate(" + degrees + ", " + map.cx + " , " + map.cy + ")")
 }
 
@@ -101,6 +102,7 @@ navigator.geolocation.getCurrentPosition((position) => {
 	let latitudeR = VectorUtils.degreeToRadian(position.coords.latitude)
 	map.setMarker(longitudeR, latitudeR, "#FF0000", "user")
 	map.setRotate(position.coords.longitude)
+	updateDial()
 	let dayArcLength = Shadow.getDayArcLength(sun, map, latitudeR)
 	let dayHours = 24 * dayArcLength
 	let dayMinutes = (dayHours - Math.floor(dayHours)) * 60
