@@ -81,7 +81,6 @@ function updateSun() {
 function updateDial() {
     let now = new Date(Date.now())
     let degrees = now.getHours() * 15 + now.getMinutes() * 0.25
-    console.log(degrees, map.rotation)
     degrees = degrees - map.rotation
     map.hourDial.setAttribute("transform", "rotate(" + degrees + ", " + map.cx + " , " + map.cy + ")")
 }
