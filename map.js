@@ -5,14 +5,19 @@ class Map {
 		this.documentSize = Math.min(window.innerWidth, window.innerHeight) * 0.9
 		this.svgElement.setAttribute("width", this.documentSize)
 		this.svgElement.setAttribute("height", this.documentSize)
+		this.hourDial = this.dom.getElementById("radial")
 		
 		this.cx = this.documentSize / 2
 		this.cy = this.documentSize / 2
 		this.r = (this.documentSize / 2) * 0.9
+		this.hourDial.setAttribute("cx" , this.cx)
+		this.hourDial.setAttribute("cy" , this.cy)
+		this.hourDial.setAttribute("width", this.documentSize)
+		this.hourDial.setAttribute("height", this.documentSize)
 		
 		let element = this.dom.createElementNS('http://www.w3.org/2000/svg', 'circle');
-		element.setAttribute("cx" , this.cy)
-		element.setAttribute("cy" , this.cx)
+		element.setAttribute("cx" , this.cx)
+		element.setAttribute("cy" , this.cy)
 		element.setAttribute("fill", "blue")
 		element.setAttribute("id", "disk")
 		element.setAttribute("r", this.r)

@@ -9,8 +9,16 @@
 <body>
 
 <svg width="1000" height="1000" id = "mainplot">
-
+<image href="clockradial.svg" id = "radial"/>
 </svg>
+
+<div>
+    <h2>Sunrise</h2>
+    <p><span id = "sunriseHour">--</span>:<span id = "sunriseMinute">--</span></p>
+    <h2>Sunset</h2>
+    <p><span id = "sunsetHour">--</span>:<span id = "sunsetMinute">--</span></p>
+</div>
+
 
 <script>
 var map = new Map("mainplot", document, window)
@@ -20,6 +28,17 @@ const mapRenderedEvent = new Event('mapRendered')
 const landData = new Request("ne_110m_land.json")
 const lakeData = new Request("ne_110m_lakes.json")
 const borderData = new Request("ne_110m_admin_0_boundary_lines_land.json")
+
+/*const clockRadial = new Request("clockradial.svg")
+
+fetch(clockRadial).then((response) => {
+    return response.text()
+}).then((clockFace) => {
+    //var parser = new DOMParser();
+	//var doc = parser.parseFromString(clockFace, 'text/xml');
+    document.getElementById("mainplot").innerHTML += clockFace
+    //console.log(doc)
+})*/
 
 fetch(landData).then((response) =>
 	response.json()
@@ -59,9 +78,18 @@ function updateSun() {
 	map.plotXYGeometry(shadowGeometry, color = "#000000", opacity = "50%", "shadow")
 }
 
+function updateDial() {
+    let now = new Date(Date.now())
+    let degrees = now.getHours() * 15 + now.getMinutes() * 0.25
+    degrees = - degrees
+    map.hourDial.setAttribute("transform", "rotate(" + degrees + ", " + map.cx + " , " + map.cy + ")")
+}
+
 document.addEventListener("mapRendered", (e) => {
 	updateSun()
+	updateDial()
 	setInterval(updateSun, 60000)
+	setInterval(updateDial, 60000)
 })
 
 var minutes = now.getTimezoneOffset()
@@ -73,6 +101,23 @@ navigator.geolocation.getCurrentPosition((position) => {
 	let latitudeR = VectorUtils.degreeToRadian(position.coords.latitude)
 	map.setMarker(longitudeR, latitudeR, "#FF0000", "user")
 	map.setRotate(position.coords.longitude)
+	let dayArcLength = Shadow.getDayArcLength(sun, map, latitudeR)
+	let dayHours = 24 * dayArcLength
+	let dayMinutes = (dayHours - Math.floor(dayHours)) * 60
+
+    let noonOffset = Shadow.getSolarNoonOffset(longitudeR)
+	var noonDate = new Date(Date.now())
+	noonDate.setUTCHours(0)
+	noonDate.setUTCMinutes(0)
+	var localNoonDate = new Date(noonDate.getTime() + noonOffset*1000)
+
+    let dayMilliSeconds = dayHours * 60 * 60 * 1000
+    let sunriseDate = new Date(localNoonDate.getTime() - dayMilliSeconds / 2)
+    let sunsetDate = new Date(localNoonDate.getTime() + dayMilliSeconds / 2)
+    document.getElementById("sunriseHour").innerText = sunriseDate.getHours()
+	document.getElementById("sunriseMinute").innerText = sunriseDate.getMinutes()
+	document.getElementById("sunsetHour").innerText = sunsetDate.getHours()
+	document.getElementById("sunsetMinute").innerText = sunsetDate.getMinutes()
 });
 
 </script>

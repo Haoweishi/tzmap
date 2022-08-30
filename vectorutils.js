@@ -7,6 +7,10 @@ class VectorUtils {
 	static degreeToRadian(degree) {
 		return (Math.PI * degree) / 180
 	}
+
+	static radianToDegree(radian) {
+	    return (180 * radian) / Math.PI
+	}
 	
 	static det(a, b, c, d) {
 		return a * d - b * c
