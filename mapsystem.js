@@ -16,5 +16,14 @@ class MapSystem {
         this.marker = this.holder.getElementById("currentHRMarker")
         this.marker.setAttribute("x", this.cx - this.marker.getBBox().width / 2)
         this.marker.setAttribute("y", this.documentSize * 0.975)
+        this.sun = new Sun(new Date(0))
+    }
+
+    setTime(date) {
+        map.dial.updatePosition(date)
+        this.sun.setDate(date)
+	    this.map.setMarker(this.sun.longitude, this.sun.latitude, "#FFFF00", "sun")
+	    let shadowGeometry = Shadow.getShadowPolygon(this.sun, map.map)
+	    this.map.plotXYGeometry(shadowGeometry, "#000000", "50%", "shadow")
     }
 }
