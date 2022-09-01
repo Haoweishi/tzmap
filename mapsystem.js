@@ -3,9 +3,9 @@ class MapSystem {
         this.window = window
         this.document = window.document
         this.holder = this.document.getElementById(elementId)
-        //this.map = new Map(this.holder.getElementById("map"))
-
         this.documentSize = Math.min(window.innerWidth, window.innerHeight) * 0.9
+        this.map = new Map("map", window, this.holder, this.documentSize)
+
         this.holder.setAttribute("width", this.documentSize)
 		this.holder.setAttribute("height", this.documentSize)
 		this.cx = this.documentSize / 2

@@ -1,14 +1,11 @@
 class Map {
-	constructor (elementId, dom, window) {
-	    this.dom = dom
-		this.svgElement = this.dom.getElementById(elementId)
-		this.documentSize = Math.min(window.innerWidth, window.innerHeight) * 0.9
-		this.svgElement.setAttribute("width", this.documentSize)
-		this.svgElement.setAttribute("height", this.documentSize)
+	constructor (elementId, window, parent, docSize) {
+	    this.dom = window.document
+		this.svgElement = parent.getElementById(elementId)
 		
-		this.cx = this.documentSize / 2
-		this.cy = this.documentSize / 2
-		this.r = (this.documentSize / 2) * 0.9
+		this.cx = docSize / 2
+		this.cy = docSize / 2
+		this.r = (docSize / 2) * 0.9
 		
 		let element = this.dom.createElementNS('http://www.w3.org/2000/svg', 'circle');
 		element.setAttribute("cx" , this.cx)
@@ -17,9 +14,6 @@ class Map {
 		element.setAttribute("id", "disk")
 		element.setAttribute("r", this.r)
 		this.svgElement.appendChild(element);
-
-		this.hourMarker.setAttribute("cy", this.documentSize * 0.95)
-		this.hourMarker.setAttribute("cx", this.cx)
 	}
 	
 	xyToCanvas(x, y) {
@@ -136,7 +130,7 @@ class Map {
 	}
 	
 	setRotate(degrees) {
-		let template = 'rotate(' + degrees + ')'
+		let template = 'rotate(' + degrees + ',' + this.cx +  ',' + this.cy + ')'
 		this.svgElement.setAttribute("transform", template)
 	}
 }

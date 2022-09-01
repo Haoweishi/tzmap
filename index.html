@@ -26,20 +26,13 @@
 
 <script>
 var map = new MapSystem("mapInterface", window)
-function updateDial() {
-    let now = new Date(Date.now())
+function updateDial(now) {
     map.dial.updatePosition(now)
 }
-updateDial()
-setInterval(updateDial, 60*1000)
 
-//var now = new Date(Date.now())
-//var sun = new Sun(now)
-
-/*const mapRenderedEvent = new Event('mapRendered')
+const mapRenderedEvent = new Event('mapRendered')
 const landData = new Request("ne_110m_land.json")
 const lakeData = new Request("ne_110m_lakes.json")
-const borderData = new Request("ne_110m_admin_0_boundary_lines_land.json")
 
 fetch(landData).then((response) =>
 	response.json()
@@ -49,14 +42,14 @@ fetch(landData).then((response) =>
 
 function plotLake(lakes) {
 	for (var i = 0; i < lakes.features.length; i++) {
-		map.plotGeometry(lakes.features[i].geometry.coordinates[0], color = "#0088FF")
+		map.map.plotGeometry(lakes.features[i].geometry.coordinates[0], color = "#0088FF")
 	}
 	document.dispatchEvent(mapRenderedEvent)
 }
 
 function plotLand(lands) {
 	for (var i = 0; i < lands.features.length; i++) {
-		map.plotGeometry(lands.features[i].geometry.coordinates[0])
+		map.map.plotGeometry(lands.features[i].geometry.coordinates[0])
 	}
 	fetch(lakeData).then((response) =>
 		response.json()
@@ -65,30 +58,40 @@ function plotLand(lands) {
 	})
 }
 
-function updateSun() {
-	sun.setDate(new Date(Date.now()))
-	map.setMarker(sun.longitude, sun.latitude, "#FFFF00", "sun")
-	shadowGeometry = Shadow.getShadowPolygon(sun, map)
-	map.plotXYGeometry(shadowGeometry, color = "#000000", opacity = "50%", "shadow")
+var now = new Date(0)
+var sun = new Sun(now)
+
+function updateSun(now) {
+	sun.setDate(now)
+	map.map.setMarker(sun.longitude, sun.latitude, "#FFFF00", "sun")
+	shadowGeometry = Shadow.getShadowPolygon(sun, map.map)
+	map.map.plotXYGeometry(shadowGeometry, color = "#000000", opacity = "50%", "shadow")
+}
+
+function eachMinute() {
+    now = new Date(Date.now())
 }
 
 document.addEventListener("mapRendered", (e) => {
-	updateSun()
-	updateDial()
-	setInterval(updateSun, 60000)
-	setInterval(updateDial, 60000)
+    now = new Date(Date.now())
+	updateSun(now)
+	updateDial(now)
+	setInterval(eachMinute, 60000)
+	setInterval(updateSun, 60000, now)
+	setInterval(updateDial, 60000, now)
 })
 
 var minutes = now.getTimezoneOffset()
 var roughDegrees = minutes * 0.25
-map.setRotate(-roughDegrees)
+map.map.setRotate(-roughDegrees)
+
 
 navigator.geolocation.getCurrentPosition((position) => {
 	let longitudeR = VectorUtils.degreeToRadian(position.coords.longitude)
 	let latitudeR = VectorUtils.degreeToRadian(position.coords.latitude)
-	map.setMarker(longitudeR, latitudeR, "#FF0000", "user")
-	map.setRotate(position.coords.longitude)
-	let dayArcLength = Shadow.getDayArcLength(sun, map, latitudeR)
+	map.map.setMarker(longitudeR, latitudeR, "#FF0000", "user")
+	map.map.setRotate(position.coords.longitude)
+	let dayArcLength = Shadow.getDayArcLength(sun, map.map, latitudeR)
 	let dayHours = 24 * dayArcLength
 	let dayMinutes = (dayHours - Math.floor(dayHours)) * 60
 
@@ -106,7 +109,7 @@ navigator.geolocation.getCurrentPosition((position) => {
 	document.getElementById("sunsetHour").innerText = sunsetDate.getHours()
 	document.getElementById("sunsetMinute").innerText = sunsetDate.getMinutes()
 });
-*/
+
 </script>
 
 </body>
