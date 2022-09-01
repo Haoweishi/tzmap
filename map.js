@@ -5,15 +5,10 @@ class Map {
 		this.documentSize = Math.min(window.innerWidth, window.innerHeight) * 0.9
 		this.svgElement.setAttribute("width", this.documentSize)
 		this.svgElement.setAttribute("height", this.documentSize)
-		this.hourDial = this.dom.getElementById("radial")
 		
 		this.cx = this.documentSize / 2
 		this.cy = this.documentSize / 2
 		this.r = (this.documentSize / 2) * 0.9
-		this.hourDial.setAttribute("cx" , this.cx)
-		this.hourDial.setAttribute("cy" , this.cy)
-		this.hourDial.setAttribute("width", this.documentSize)
-		this.hourDial.setAttribute("height", this.documentSize)
 		
 		let element = this.dom.createElementNS('http://www.w3.org/2000/svg', 'circle');
 		element.setAttribute("cx" , this.cx)
@@ -22,6 +17,9 @@ class Map {
 		element.setAttribute("id", "disk")
 		element.setAttribute("r", this.r)
 		this.svgElement.appendChild(element);
+
+		this.hourMarker.setAttribute("cy", this.documentSize * 0.95)
+		this.hourMarker.setAttribute("cx", this.cx)
 	}
 	
 	xyToCanvas(x, y) {

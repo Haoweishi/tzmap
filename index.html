@@ -1,15 +1,19 @@
 <html>
 <head>
-<title>Daynight Map and Clock</title>
-<script src = "vector.js"></script>
-<script src = "vectorutils.js"></script>
-<script src = "map.js"></script>
-<script src = "sun.js"></script>
+    <title>Daynight Map and Clock</title>
+    <script src = "vector.js"></script>
+    <script src = "vectorutils.js"></script>
+    <script src = "map.js"></script>
+    <script src = "sun.js"></script>
+    <script src = "mapsystem.js"></script>
+    <script src = "hourdial.js"></script>
 </head>
 <body>
 
-<svg width="1000" height="1000" id = "mainplot">
-<image href="clockradial.svg" id = "radial"/>
+<svg width = "1000" height = "1000" id = "mapInterface">
+    <g id = "map"></g>
+    <image href="clockradial.svg" id = "radial"></image>
+    <image href="hourMarker.svg" id = "currentHRMarker"></image>
 </svg>
 
 <div>
@@ -21,24 +25,21 @@
 
 
 <script>
-var map = new Map("mainplot", document, window)
-var now = new Date(Date.now())
-var sun = new Sun(now)
-const mapRenderedEvent = new Event('mapRendered')
+var map = new MapSystem("mapInterface", window)
+function updateDial() {
+    let now = new Date(Date.now())
+    map.dial.updatePosition(now)
+}
+updateDial()
+setInterval(updateDial, 60*1000)
+
+//var now = new Date(Date.now())
+//var sun = new Sun(now)
+
+/*const mapRenderedEvent = new Event('mapRendered')
 const landData = new Request("ne_110m_land.json")
 const lakeData = new Request("ne_110m_lakes.json")
 const borderData = new Request("ne_110m_admin_0_boundary_lines_land.json")
-
-/*const clockRadial = new Request("clockradial.svg")
-
-fetch(clockRadial).then((response) => {
-    return response.text()
-}).then((clockFace) => {
-    //var parser = new DOMParser();
-	//var doc = parser.parseFromString(clockFace, 'text/xml');
-    document.getElementById("mainplot").innerHTML += clockFace
-    //console.log(doc)
-})*/
 
 fetch(landData).then((response) =>
 	response.json()
@@ -52,13 +53,6 @@ function plotLake(lakes) {
 	}
 	document.dispatchEvent(mapRenderedEvent)
 }
-
-/*function plotBorders(borders) {
-	for (var i = 0; i < borders.features.length; i++) {
-		map.plotLine(borders.features[i].geometry.coordinates, color = "#000000")
-	}
-	document.dispatchEvent(mapRenderedEvent)
-}*/
 
 function plotLand(lands) {
 	for (var i = 0; i < lands.features.length; i++) {
@@ -76,13 +70,6 @@ function updateSun() {
 	map.setMarker(sun.longitude, sun.latitude, "#FFFF00", "sun")
 	shadowGeometry = Shadow.getShadowPolygon(sun, map)
 	map.plotXYGeometry(shadowGeometry, color = "#000000", opacity = "50%", "shadow")
-}
-
-function updateDial() {
-    let now = new Date(Date.now())
-    let degrees = now.getHours() * 15 + now.getMinutes() * 0.25
-    degrees = - degrees
-    map.hourDial.setAttribute("transform", "rotate(" + degrees + ", " + map.cx + " , " + map.cy + ")")
 }
 
 document.addEventListener("mapRendered", (e) => {
@@ -119,7 +106,7 @@ navigator.geolocation.getCurrentPosition((position) => {
 	document.getElementById("sunsetHour").innerText = sunsetDate.getHours()
 	document.getElementById("sunsetMinute").innerText = sunsetDate.getMinutes()
 });
-
+*/
 </script>
 
 </body>
