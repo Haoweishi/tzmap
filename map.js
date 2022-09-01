@@ -1,4 +1,4 @@
-class Map {
+class WorldMap {
 	constructor (elementId, window, parent, docSize) {
 	    this.dom = window.document
 		this.svgElement = parent.getElementById(elementId)
@@ -105,10 +105,10 @@ class Map {
 	}
 	
 	plotXYGeometry(coordList, color = "#FFFFFF", opacity = "100%", id) {
-		let geometry = document.getElementById(id)
+		let geometry = this.dom.getElementById(id)
 		let existing = true
 		if (geometry == null) {
-			geometry = document.createElementNS("http://www.w3.org/2000/svg", "polygon")
+			geometry = this.dom.createElementNS("http://www.w3.org/2000/svg", "polygon")
 			existing = false
 		}
 		let instructions = ""
@@ -138,5 +138,5 @@ class Map {
 }
 
 if (typeof module !== "undefined") {
-    module.exports = Map
+    module.exports = WorldMap
 }
