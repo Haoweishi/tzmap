@@ -15,3 +15,7 @@ class HourDial {
         this.clockradial.setAttribute("transform", "rotate(" + degrees + ", " + this.cx + " , " + this.cy + ")")
     }
 }
+
+if (typeof module !== "undefined") {
+    module.exports = HourDial
+}
