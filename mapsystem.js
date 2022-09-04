@@ -14,7 +14,7 @@ class MapSystem {
         this.dial = new HourDial("radial", this.holder, this.cx, this.cy, this.documentSize, this.documentSize)
 
         this.marker = this.holder.getElementById("currentHRMarker")
-        this.marker.setAttribute("x", this.cx - this.marker.getBBox().width / 2)
+        this.marker.setAttribute("x", this.cx - 135 / 2)
         this.marker.setAttribute("y", this.documentSize * 0.975)
         this.sun = new Sun(new Date(0))
     }
