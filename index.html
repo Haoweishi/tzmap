@@ -92,9 +92,19 @@ navigator.geolocation.getCurrentPosition((position) => {
     let sunriseDate = new Date(localNoonDate.getTime() - dayMilliSeconds / 2)
     let sunsetDate = new Date(localNoonDate.getTime() + dayMilliSeconds / 2)
     document.getElementById("sunriseHour").innerText = sunriseDate.getHours()
-	document.getElementById("sunriseMinute").innerText = sunriseDate.getMinutes()
+
+    if (sunriseDate.getMinutes() < 10) {
+	    document.getElementById("sunriseMinute").innerText = "0" + sunriseDate.getMinutes().toString()
+	} else {
+	    document.getElementById("sunriseMinute").innerText = sunriseDate.getMinutes()
+	}
+
 	document.getElementById("sunsetHour").innerText = sunsetDate.getHours()
-	document.getElementById("sunsetMinute").innerText = sunsetDate.getMinutes()
+	if (sunsetDate.getMinutes() < 10) {
+	    document.getElementById("sunsetMinute").innerText = "0" + sunsetDate.getMinutes().toString()
+	} else {
+	    document.getElementById("sunsetMinute").innerText = sunsetDate.getMinutes()
+	}
 });
 
 </script>
