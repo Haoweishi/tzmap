@@ -135,6 +135,12 @@ class WorldMap {
 		let template = 'rotate(' + degrees + ',' + this.cx +  ',' + this.cy + ')'
 		this.svgElement.setAttribute("transform", template)
 	}
+
+	getGreatCircleTrack(start, end) {
+	    let startXYZ = this.geoCoordinateToXY(VectorUtils.degreeToRadian(start[0]), VectorUtils.degreeToRadian(start[1]))
+	    let endXYZ = this.geoCoordinateToXY(VectorUtils.degreeToRadian(end[0]), VectorUtils.degreeToRadian(end[1]))
+	    let axis = startXYZ.cross(endXYZ)
+	}
 }
 
 if (typeof module !== "undefined") {
