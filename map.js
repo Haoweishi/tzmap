@@ -16,6 +16,8 @@ class WorldMap {
 		this.svgElement.appendChild(element);
 
 		this.rotation = 0
+
+		this.earthRadius = 3963
 	}
 	
 	xyToCanvas(x, y) {
@@ -140,6 +142,16 @@ class WorldMap {
 	    let startXYZ = this.geoCoordinateToXY(VectorUtils.degreeToRadian(start[0]), VectorUtils.degreeToRadian(start[1]))
 	    let endXYZ = this.geoCoordinateToXY(VectorUtils.degreeToRadian(end[0]), VectorUtils.degreeToRadian(end[1]))
 	    let axis = startXYZ.cross(endXYZ)
+	}
+
+	getDistance(start, end) {
+	    let startXYZ = this.geoCoordinateToXY(VectorUtils.degreeToRadian(start[0]), VectorUtils.degreeToRadian(start[1]))
+	    let endXYZ = this.geoCoordinateToXY(VectorUtils.degreeToRadian(end[0]), VectorUtils.degreeToRadian(end[1]))
+	    let cosTheta = (startXYZ.dot(endXYZ)) / (startXYZ.magnitude() * endXYZ.magnitude())
+	    let diffAngle = Math.acos(cosTheta)
+	    let arcPercentage = diffAngle / (2 * Math.PI)
+	    let distance = arcPercentage * (2 * this.earthRadius * Math.PI)
+	    return distance
 	}
 }
 
