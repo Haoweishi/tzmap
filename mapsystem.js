@@ -1,8 +1,11 @@
 if (typeof require !== "undefined") {
-    let WorldMap = require("./map.js")
-    let {Sun, Shadow} = require("./sun.js")
-    let HourDial = require("./hourdial.js")
+    WorldMap = require("./map.js")
+    SunShadow = require("./sun.js")
+    Sun = SunShadow["Sun"]
+    Shadow = SunShadow["Shadow"]
+    HourDial = require("./hourdial.js")
 }
+
 
 class MapSystem {
     constructor(elementId, window) {
