@@ -1,4 +1,4 @@
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 <head>
     <title>Daynight Map and Clock</title>
     <script src = "vector.js"></script>
@@ -7,6 +7,7 @@
     <script src = "sun.js"></script>
     <script src = "mapsystem.js"></script>
     <script src = "hourdial.js"></script>
+    <script src = "https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
 </head>
 <body>
 
@@ -23,6 +24,47 @@
     <p><span id = "sunsetHour">--</span>:<span id = "sunsetMinute">--</span></p>
 </div>
 
+<div>
+    <p>Home Location</p>
+    <p><span id = "lat"></span>,<span id = "long"></span></p>
+    <p>Distance to Home: <span id = "distance"></span> miles</p>
+    <button onclick="setHome()">Set Home</button>
+</div>
+
+<script>
+    function setHome() {
+        navigator.geolocation.getCurrentPosition((position) => {
+            Cookies.set("HomeLatitude", position.coords.latitude, {expires: 365})
+            Cookies.set("HomeLongitude", position.coords.longitude, {expires : 365})
+            document.dispatchEvent(new Event("updateLocation"))
+        })
+    }
+
+    document.addEventListener("updateLocation", (e) => {
+        let homeLatitude = Cookies.get("HomeLatitude")
+        let homeLongitude = Cookies.get("HomeLongitude")
+
+        let latitudeString = ""
+        let longitudeString = ""
+
+        if (homeLatitude > 0) {
+            latitudeString = homeLatitude.toString() + " N"
+        } else {
+            latitudeString = (-homeLatitude).toString() + " S"
+        }
+
+        if (homeLongitude > 0) {
+            longitudeString = homeLongitude.toString() + " E"
+        } else {
+            longitudeString = (-homeLongitude).toString() + " W"
+        }
+
+        document.getElementById("lat").innerText = latitudeString
+        document.getElementById("long").innerText = longitudeString
+    })
+
+    document.dispatchEvent(new Event("updateLocation"))
+</script>
 
 <script>
 var map = new MapSystem("mapInterface", window)
@@ -79,7 +121,6 @@ navigator.geolocation.getCurrentPosition((position) => {
 	map.map.setRotate(position.coords.longitude)
 	let dayArcLength = Shadow.getDayArcLength(map.sun, map.map, latitudeR)
 	let dayHours = 24 * dayArcLength
-	console.log(dayHours)
 	let dayMinutes = (dayHours - Math.floor(dayHours)) * 60
 
     let noonOffset = Shadow.getSolarNoonOffset(longitudeR)
@@ -105,6 +146,15 @@ navigator.geolocation.getCurrentPosition((position) => {
 	} else {
 	    document.getElementById("sunsetMinute").innerText = sunsetDate.getMinutes()
 	}
+
+	let homeLatitude = Cookies.get("HomeLatitude")
+    let homeLongitude = Cookies.get("HomeLongitude")
+    if (homeLatitude != undefined & homeLongitude != undefined) {
+        homeLatitude = VectorUtils.degreeToRadian(homeLatitude)
+        homeLongitude = VectorUtils.degreeToRadian(homeLongitude)
+        let distance = map.map.getDistance([homeLongitude, homeLatitude] , [longitudeR, latitudeR])
+        document.getElementById("distance").innerText = distance
+    }
 });
 
 </script>
