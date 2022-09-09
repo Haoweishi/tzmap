@@ -115,10 +115,12 @@ map.map.setRotate(-roughDegrees)
 
 
 navigator.geolocation.getCurrentPosition((position) => {
-	let longitudeR = VectorUtils.degreeToRadian(position.coords.longitude)
-	let latitudeR = VectorUtils.degreeToRadian(position.coords.latitude)
+    let longitude = position.coords.longitude
+    let latitude = position.coords.latitude
+	let longitudeR = VectorUtils.degreeToRadian(longitude)
+	let latitudeR = VectorUtils.degreeToRadian(latitude)
 	map.map.setMarker(longitudeR, latitudeR, "#FF0000", "user")
-	map.map.setRotate(position.coords.longitude)
+	map.map.setRotate(longitude)
 	let dayArcLength = Shadow.getDayArcLength(map.sun, map.map, latitudeR)
 	let dayHours = 24 * dayArcLength
 	let dayMinutes = (dayHours - Math.floor(dayHours)) * 60
@@ -152,7 +154,7 @@ navigator.geolocation.getCurrentPosition((position) => {
     if (homeLatitude != undefined & homeLongitude != undefined) {
         homeLatitude = VectorUtils.degreeToRadian(homeLatitude)
         homeLongitude = VectorUtils.degreeToRadian(homeLongitude)
-        let distance = map.map.getDistance([homeLongitude, homeLatitude] , [longitudeR, latitudeR])
+        let distance = map.map.getDistance([homeLongitude, homeLatitude] , [longitude, latitude])
         document.getElementById("distance").innerText = distance
     }
 });
